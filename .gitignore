@@ -2,6 +2,7 @@
 __pycache__/
 *.py[codz]
 *$py.class
+violation_frames/
 
 # C extensions
 *.so
