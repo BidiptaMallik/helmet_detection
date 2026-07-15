@@ -10,10 +10,12 @@ from pathlib import Path
 from ultralytics import YOLO
 from pymongo import MongoClient
 
+import os
 
+MONGO_URI = os.getenv("MONGO_URI")
 HELMET_MODEL_PATH  = "helmet_model.pt"      
 PLATE_MODEL_PATH   = "plate_model.pt"       
-MONGO_URI          = "mongodb+srv://helmet_detection:m7hkqM07UK1fsLzI@cluster1.xrtpvme.mongodb.net/?appName=Cluster1"
+
 MONGO_DB           = "traffic_violations"
 MONGO_COLLECTION   = "no_helmet_records"
 SAVE_FRAMES_DIR    = "violation_frames"     
