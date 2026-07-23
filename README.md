@@ -4,7 +4,7 @@ A real-time traffic violation detection system that automatically detects riders
 
 ---
 
-## 🚀 Features
+##  Features
 
 - Helmet Detection (with/without helmet)
 - Number Plate Detection & OCR
@@ -17,7 +17,7 @@ A real-time traffic violation detection system that automatically detects riders
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Detection Models
 - YOLOv8 (Ultralytics)
@@ -39,17 +39,20 @@ A real-time traffic violation detection system that automatically detects riders
 
 ---
 
-## 📂 Folder Structure
+##  Folder Structure
+
+```
 helmet_detection/
 ├── helmet_detection_system.py
 ├── helmet_model.pt
 ├── plate_model.pt
 ├── violation_frames/
 └── requirements.txt
+```
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
 Clone the repository
 
@@ -71,23 +74,25 @@ python helmet_detection_system.py
 
 ---
 
-## 🎯 How It Works
+##  How It Works
 
+```
 Input (Video/Stream/Image)
-↓
+        ↓
 Helmet Detection (YOLOv8)
-↓
+        ↓
 No Helmet Found?
-↓
+        ↓
 Number Plate Detection (YOLOv8)
-↓
+        ↓
 OCR reads plate text (EasyOCR)
-↓
+        ↓
 Save to MongoDB Atlas + Frame snapshot
+```
 
 ---
 
-## 📊 Model Performance
+##  Model Performance
 
 | Model | Accuracy | Dataset Size |
 |---|---|---|
@@ -96,7 +101,6 @@ Save to MongoDB Atlas + Frame snapshot
 
 ---
 
-## 📸 Screenshots
 
 
 ---
