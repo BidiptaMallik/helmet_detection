@@ -63,7 +63,7 @@ git clone https://github.com/BidiptaMallik/helmet_detection.git
 Install dependencies
 
 ```bash
-pip install ultralytics opencv-python easyocr pymongo yt-dlp
+pip install ultralytics opencv-python easyocr pymongo 
 ```
 
 Run the system
