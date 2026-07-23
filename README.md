@@ -31,7 +31,7 @@ A real-time traffic violation detection system that automatically detects riders
 - MongoDB Atlas
 
 ### Training
-- Google Colab (Tesla T4 GPU)
+- Google Colab 
 - Roboflow Dataset
 
 ### Language
