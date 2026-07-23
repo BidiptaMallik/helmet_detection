@@ -1,4 +1,4 @@
-# 🚦 Helmet & Number Plate Violation Detection System
+#  Helmet & Number Plate Violation Detection System
 
 A real-time traffic violation detection system that automatically detects riders without helmets, reads their number plates using OCR, and logs violations to a cloud database.
 
