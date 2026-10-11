@@ -1,6 +1,6 @@
-# City Detection and Community Reports
+# Smart City Detection and Community Reports
 
-A full-stack application for reviewing traffic, helmet use, garbage, and potholes from video, webcam, or CCTV sources. Residents can submit location-based reports with photos; administrators can manage detection events and update residents as work progresses.
+A full-stack Smart City application for reviewing traffic, helmet use, garbage, and potholes from video, webcam, or CCTV sources. Residents can submit location-based reports with photos; administrators can manage detection events and update residents as work progresses.
 
 ## Features
 
@@ -11,6 +11,16 @@ A full-stack application for reviewing traffic, helmet use, garbage, and pothole
 - Resident accounts and issue reports for traffic congestion, garbage, or potholes. Reports include contact information, location, description, and an area photo.
 - Admin progress messages with photos. A completion photo is required to resolve a report; residents can follow updates and rate resolved work.
 - Four model-specific MongoDB collections, plus collections for accounts, sessions, reports, and report updates.
+
+## Tech Stack
+
+| Area | Technologies |
+| --- | --- |
+| Frontend | React, Vite, React Router, Tailwind CSS, Axios, Lucide |
+| Backend API | Python, FastAPI, Uvicorn, Pydantic |
+| Detection | Ultralytics YOLO, OpenCV, EasyOCR |
+| Database | MongoDB Atlas, PyMongo |
+| Authentication | HTTP-only session cookies, PBKDF2 password hashing |
 
 ## Requirements
 
@@ -110,3 +120,7 @@ Reports can be deleted by their owner or an administrator. Deletion removes the 
 | Potholes | `backend/models/pathhole.pt` |
 
 The backend loads models on demand. Keep the weight files in `backend/models/` and do not commit private credentials or uploaded report photos.
+
+## Author
+
+Bidipta Mallik
