@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Temporary uploaded videos
+backend/tmp_uploads/
+
+# Generated output videos
+backend/output_videos/*.mp4
+
