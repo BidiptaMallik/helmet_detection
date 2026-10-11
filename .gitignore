@@ -3,6 +3,7 @@ __pycache__/
 *.py[codz]
 *$py.class
 violation_frames/
+backend/report_photos/
 
 # C extensions
 *.so
