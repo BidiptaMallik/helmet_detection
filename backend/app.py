@@ -19,9 +19,9 @@ Run:
     uvicorn app:app --reload --port 8000
 """
 
-# ============================================================
-# IMPORTS
-# ============================================================
+
+
+
 
 import os
 import datetime
@@ -55,7 +55,6 @@ from fastapi import (
     WebSocket,
     WebSocketDisconnect,
 )
-
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -66,16 +65,16 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 
-# ============================================================
-# ENVIRONMENT
-# ============================================================
+
+
+
 
 load_dotenv()
 
 
-# ============================================================
-# LAZY MODEL VARIABLES
-# ============================================================
+
+
+
 
 _YOLO = None
 _EASYOCR_READER = None
@@ -86,21 +85,19 @@ _garbage_model = None
 _pothole_model = None
 _traffic_model = None
 
-# Lock used by all traffic streams so every stream safely shares
-# the SAME loaded congestion.pt YOLO model.
 TRAFFIC_INFERENCE_LOCK = asyncio.Lock()
 
 
-# ============================================================
-# BASE DIRECTORY
-# ============================================================
+
+
+
 
 BASE_DIR = Path(__file__).resolve().parent
 
 
-# ============================================================
-# MODEL PATHS
-# ============================================================
+
+
+
 
 HELMET_MODEL_PATH = str(
     BASE_DIR / "models" / "helmet_model.pt"
@@ -114,7 +111,6 @@ GARBAGE_MODEL_PATH = str(
     BASE_DIR / "models" / "garbage_model.pt"
 )
 
-# Keep your actual filename
 POTHOLE_MODEL_PATH = str(
     BASE_DIR / "models" / "pathhole.pt"
 )
@@ -124,9 +120,9 @@ TRAFFIC_MODEL_PATH = str(
 )
 
 
-# ============================================================
-# MONGODB
-# ============================================================
+
+
+
 
 MONGO_URI = os.getenv("MONGO_URI")
 
@@ -144,7 +140,6 @@ MODEL_COLLECTIONS = {
     "pothole": "pothole_records",
 }
 
-# Keep reading existing records while new detections use model collections.
 LEGACY_COLLECTION_NAME = "smart_city_records"
 AUTH_USERS_COLLECTION = "users"
 AUTH_SESSIONS_COLLECTION = "user_sessions"
@@ -159,9 +154,9 @@ AUTH_COOKIE_SECURE = os.getenv("AUTH_COOKIE_SECURE", "false").lower() == "true"
 ADMIN_SETUP_KEY = os.getenv("ADMIN_SETUP_KEY", "")
 
 
-# ============================================================
-# DIRECTORIES
-# ============================================================
+
+
+
 
 SAVE_FRAMES_DIR = BASE_DIR / "violation_frames"
 SAVE_FRAMES_DIR.mkdir(
@@ -182,12 +177,11 @@ REPORT_PHOTOS_DIR.mkdir(
 )
 
 
-# ============================================================
-# CONFIDENCE SETTINGS
-# ============================================================
 
-# IMPORTANT:
-# Increased from 0.2 to 0.5 to reduce false helmet detections.
+
+
+
+
 CONFIDENCE_HELMET = float(
     os.getenv(
         "CONFIDENCE_HELMET",
@@ -223,22 +217,16 @@ CONFIDENCE_TRAFFIC = float(
     )
 )
 
-# Simple vehicle-count thresholds used to display a congestion level.
-# Adjust these for your camera/location if needed.
 TRAFFIC_LOW_MAX = int(os.getenv("TRAFFIC_LOW_MAX", "5"))
 TRAFFIC_MEDIUM_MAX = int(os.getenv("TRAFFIC_MEDIUM_MAX", "12"))
 
 
-# ============================================================
-# VIDEO SETTINGS
-# ============================================================
+
 
 MAX_VIDEO_FRAMES = 300
 
 
-# ============================================================
-# FASTAPI
-# ============================================================
+
 
 class RoleGateMiddleware:
 
@@ -355,9 +343,9 @@ app = FastAPI(
 app.add_middleware(RoleGateMiddleware)
 
 
-# ============================================================
-# CORS
-# ============================================================
+
+
+
 
 FRONTEND_ORIGINS = [
     origin.strip()
@@ -379,9 +367,9 @@ app.add_middleware(
 )
 
 
-# ============================================================
-# STATIC FRAMES
-# ============================================================
+
+
+
 
 app.mount(
     "/frames",
@@ -392,9 +380,9 @@ app.mount(
 )
 
 
-# ============================================================
-# MONGODB CLIENT
-# ============================================================
+
+
+
 
 _client: Optional[MongoClient] = None
 
@@ -673,9 +661,9 @@ def ensure_model_collections():
         )
 
 
-# ============================================================
-# YOLO IMPORT
-# ============================================================
+
+
+
 
 def _lazy_imports():
 
@@ -688,9 +676,9 @@ def _lazy_imports():
         _YOLO = YOLO
 
 
-# ============================================================
-# TRAFFIC / CONGESTION MODEL
-# ============================================================
+
+
+
 
 def get_traffic_model():
 
@@ -725,9 +713,9 @@ def get_traffic_model():
     return _traffic_model
 
 
-# ============================================================
-# HELMET MODEL
-# ============================================================
+
+
+
 
 def get_helmet_model():
 
@@ -780,9 +768,9 @@ def get_helmet_model():
     return _helmet_model
 
 
-# ============================================================
-# PLATE MODEL
-# ============================================================
+
+
+
 
 def get_plate_model():
 
@@ -821,9 +809,9 @@ def get_plate_model():
     return _plate_model
 
 
-# ============================================================
-# GARBAGE MODEL
-# ============================================================
+
+
+
 
 def get_garbage_model():
 
@@ -862,9 +850,9 @@ def get_garbage_model():
     return _garbage_model
 
 
-# ============================================================
-# POTHOLE MODEL
-# ============================================================
+
+
+
 
 def get_pothole_model():
 
@@ -903,9 +891,9 @@ def get_pothole_model():
     return _pothole_model
 
 
-# ============================================================
-# OCR
-# ============================================================
+
+
+
 
 def get_ocr_reader():
 
@@ -931,9 +919,9 @@ def get_ocr_reader():
     return _EASYOCR_READER
 
 
-# ============================================================
-# PYDANTIC MODELS
-# ============================================================
+
+
+
 
 class ViolationOut(BaseModel):
 
@@ -1608,9 +1596,9 @@ def update_issue_report_status(report_id: str, body: ReportStatusRequest):
     return {"id": report_id, "status": body.status}
 
 
-# ============================================================
-# CONVERT MONGO RECORD → API OUTPUT
-# ============================================================
+
+
+
 
 def _record_to_out(record) -> ViolationOut:
 
@@ -1637,9 +1625,9 @@ def _record_to_out(record) -> ViolationOut:
     )
 
 
-# ============================================================
-# SAVE HELMET VIOLATION
-# ============================================================
+
+
+
 
 def save_violation(
     collection,
@@ -1659,7 +1647,7 @@ def save_violation(
         frame_name
     )
 
-    # Save image
+
     success = cv2.imwrite(
         str(frame_path),
         frame
@@ -1720,9 +1708,9 @@ def save_violation(
     )
 
 
-# ============================================================
-# SAVE GARBAGE / POTHOLE RECORD
-# ============================================================
+
+
+
 
 def save_generic_record(
     event_type: str,
@@ -1836,9 +1824,9 @@ def save_traffic_record(
     )
 
 
-# ============================================================
-# MAIN HELMET + PLATE + OCR DETECTION
-# ============================================================
+
+
+
 
 def run_detection_on_frame(
     frame,
@@ -1853,9 +1841,9 @@ def run_detection_on_frame(
 
     reader = get_ocr_reader()
 
-    # --------------------------------------------------------
-    # Resize
-    # --------------------------------------------------------
+
+
+
 
     frame = cv2.resize(
         frame,
@@ -1869,9 +1857,9 @@ def run_detection_on_frame(
     saved_out = []
 
 
-    # ========================================================
-    # HELMET DETECTION
-    # ========================================================
+
+
+
 
     helmet_results = helmet_model(
         frame,
@@ -1881,9 +1869,9 @@ def run_detection_on_frame(
     )
 
 
-    # ========================================================
-    # DEBUG OUTPUT
-    # ========================================================
+
+
+
 
     print(
         "\n========== HELMET DETECTIONS =========="
@@ -1927,9 +1915,9 @@ def run_detection_on_frame(
     )
 
 
-    # ========================================================
-    # PROCESS EACH HELMET DETECTION
-    # ========================================================
+
+
+
 
     for det in helmet_results[0].boxes:
 
@@ -1953,9 +1941,8 @@ def run_detection_on_frame(
         )
 
 
-        # ----------------------------------------------------
-        # Add detection to response
-        # ----------------------------------------------------
+
+
 
         boxes_out.append(
             DetectionBox(
@@ -1974,9 +1961,9 @@ def run_detection_on_frame(
         )
 
 
-        # ====================================================
-        # WITH HELMET
-        # ====================================================
+
+
+
 
         if label_lower == "with helmet":
 
@@ -2007,18 +1994,17 @@ def run_detection_on_frame(
             continue
 
 
-        # ====================================================
-        # ONLY PROCESS WITHOUT HELMET
-        # ====================================================
+
+
+
 
         if label_lower != "without helmet":
 
             continue
 
 
-        # ----------------------------------------------------
-        # Extra safety confidence
-        # ----------------------------------------------------
+
+
 
         if conf < 0.5:
 
@@ -2030,9 +2016,9 @@ def run_detection_on_frame(
             continue
 
 
-        # ====================================================
-        # NO HELMET DRAWING
-        # ====================================================
+
+
+
 
         cv2.rectangle(
             display,
@@ -2066,9 +2052,9 @@ def run_detection_on_frame(
         )
 
 
-        # ====================================================
-        # PLATE DETECTION
-        # ====================================================
+
+
+
 
         plate_results = plate_model(
             frame,
@@ -2078,18 +2064,16 @@ def run_detection_on_frame(
         )
 
 
-        # ====================================================
-        # NO PLATE FOUND
-        # ====================================================
+
+
+
 
         if len(
             plate_results[0].boxes
         ) == 0:
 
-            # -----------------------------------------------
-            # Quantize center so small movement doesn't
-            # create a new violation every frame.
-            # -----------------------------------------------
+
+
 
             center_x = (
                 (x1 + x2) // 2
@@ -2130,9 +2114,9 @@ def run_detection_on_frame(
             continue
 
 
-        # ====================================================
-        # PLATE FOUND
-        # ====================================================
+
+
+
 
         for pdet in plate_results[0].boxes:
 
@@ -2142,9 +2126,8 @@ def run_detection_on_frame(
             )
 
 
-            # ------------------------------------------------
-            # Safety bounds
-            # ------------------------------------------------
+
+
 
             px1 = max(
                 0,
@@ -2178,9 +2161,9 @@ def run_detection_on_frame(
                 continue
 
 
-            # =================================================
-            # OCR
-            # =================================================
+
+
+
 
             ocr_results = reader.readtext(
                 plate_crop
@@ -2207,9 +2190,9 @@ def run_detection_on_frame(
             )
 
 
-            # =================================================
-            # DRAW PLATE
-            # =================================================
+
+
+
 
             cv2.rectangle(
                 display,
@@ -2236,9 +2219,9 @@ def run_detection_on_frame(
             )
 
 
-            # =================================================
-            # SAVE VIOLATION
-            # =================================================
+
+
+
 
             if normalized_plate not in seen_plates:
 
@@ -2269,9 +2252,9 @@ def run_detection_on_frame(
     )
 
 
-# ============================================================
-# TRAFFIC / CONGESTION FRAME DETECTION
-# ============================================================
+
+
+
 
 def run_traffic_on_frame(frame):
 
@@ -2382,9 +2365,9 @@ def encode_frame_base64(frame):
     ).decode("utf-8")
 
 
-# ============================================================
-# HEALTH
-# ============================================================
+
+
+
 
 @app.get("/api/health")
 def health():
@@ -2393,7 +2376,6 @@ def health():
         "api": "ok"
     }
 
-    # MongoDB
     try:
 
         get_collection().estimated_document_count()
@@ -2407,7 +2389,7 @@ def health():
         )
 
 
-    # Models
+
     status[
         "helmet_model_present"
     ] = os.path.exists(
@@ -2444,9 +2426,9 @@ def health():
     return status
 
 
-# ============================================================
-# HELMET VIOLATIONS
-# ============================================================
+
+
+
 
 @app.get(
     "/api/violations",
@@ -2503,9 +2485,9 @@ def list_violations(
     ]
 
 
-# ============================================================
-# MODEL DETECTION RECORDS
-# ============================================================
+
+
+
 
 @app.get(
     "/api/smart-city-records"
@@ -2598,9 +2580,9 @@ def list_smart_city_records(
     return results
 
 
-# ============================================================
-# STATISTICS
-# ============================================================
+
+
+
 
 @app.get(
     "/api/stats",
@@ -2797,9 +2779,9 @@ def delete_detection_event(feature: str, event_id: str):
     return {"id": event_id, "feature": feature, "deleted": True}
 
 
-# ============================================================
-# DELETE VIOLATION
-# ============================================================
+
+
+
 
 @app.delete(
     "/api/violations/{violation_id}"
@@ -2846,9 +2828,9 @@ def delete_violation(
     }
 
 
-# ============================================================
-# HELMET IMAGE DETECTION
-# ============================================================
+
+
+
 
 @app.post(
     "/api/detect/image",
@@ -2933,9 +2915,9 @@ async def detect_image(
     )
 
 
-# ============================================================
-# TRAFFIC / CONGESTION IMAGE DETECTION
-# ============================================================
+
+
+
 
 @app.post("/api/detect/traffic")
 async def detect_traffic(
@@ -2989,9 +2971,9 @@ async def detect_traffic(
     }
 
 
-# ============================================================
-# GARBAGE DETECTION
-# ============================================================
+
+
+
 
 @app.post(
     "/api/detect/garbage",
@@ -3166,9 +3148,9 @@ async def detect_garbage(
     )
 
 
-# ============================================================
-# POTHOLE DETECTION
-# ============================================================
+
+
+
 
 @app.post(
     "/api/detect/pothole",
@@ -3343,9 +3325,9 @@ async def detect_pothole(
     )
 
 
-# ============================================================
-# TRAFFIC / CONGESTION VIDEO DETECTION
-# ============================================================
+
+
+
 
 @app.post("/api/detect/traffic/video")
 async def detect_traffic_video(
@@ -3433,9 +3415,9 @@ async def detect_traffic_video(
     }
 
 
-# ============================================================
-# HELMET VIDEO DETECTION
-# ============================================================
+
+
+
 
 @app.post(
     "/api/detect/video",
@@ -3602,9 +3584,9 @@ async def detect_video(
     )
 
 
-# ============================================================
-# UPLOAD VIDEO
-# ============================================================
+
+
+
 
 @app.post(
     "/api/upload/video"
@@ -3653,9 +3635,9 @@ async def upload_video(
     }
 
 
-# ============================================================
-# TRAFFIC LIVE UPLOADED-VIDEO WEBSOCKET
-# ============================================================
+
+
+
 
 @app.websocket("/ws/traffic/{filename}")
 async def ws_traffic_video(
@@ -3766,9 +3748,9 @@ async def ws_traffic_video(
             pass
 
 
-# ============================================================
-# LIVE VIDEO WEBSOCKET
-# ============================================================
+
+
+
 
 @app.websocket(
     "/ws/detect/{filename}"
@@ -4041,9 +4023,9 @@ async def ws_detect_video(
             pass
 
 
-# ============================================================
-# TRAFFIC / CONGESTION WEBCAM
-# ============================================================
+
+
+
 
 @app.post("/api/detect/traffic/webcam")
 def detect_traffic_webcam(
@@ -4114,9 +4096,9 @@ def detect_traffic_webcam(
     }
 
 
-# ============================================================
-# WEBCAM
-# ============================================================
+
+
+
 
 @app.post(
     "/api/detect/webcam",
@@ -4243,9 +4225,9 @@ def detect_webcam(
     )
 
 
-# ============================================================
-# TRAFFIC / CONGESTION CCTV / RTSP
-# ============================================================
+
+
+
 
 @app.websocket("/ws/traffic/cctv")
 async def ws_traffic_cctv(
@@ -4352,9 +4334,9 @@ async def ws_traffic_cctv(
             pass
 
 
-# ============================================================
-# CCTV / RTSP
-# ============================================================
+
+
+
 
 @app.websocket(
     "/ws/detect/cctv"
@@ -4566,15 +4548,13 @@ async def ws_detect_cctv(
 
 
 
-# ============================================================
-# FEATURE-SPECIFIC API COMPATIBILITY ROUTES
-# ============================================================
-# These routes intentionally mirror the frontend feature names.
-# The original /api/detect/* routes remain available too.
 
-# -----------------------------
-# HELMET
-# -----------------------------
+
+
+
+
+
+
 
 @app.post("/api/helmet/image")
 async def helmet_image(file: UploadFile = File(...)):
@@ -4597,9 +4577,9 @@ def helmet_webcam(
     return detect_webcam(camera_index, num_frames)
 
 
-# -----------------------------
-# TRAFFIC / CONGESTION
-# -----------------------------
+
+
+
 
 @app.post("/api/traffic/image")
 async def traffic_image(file: UploadFile = File(...)):
@@ -4622,9 +4602,9 @@ def traffic_webcam(
     return detect_traffic_webcam(camera_index, num_frames)
 
 
-# -----------------------------
-# GENERIC GARBAGE / POTHOLE FRAME DETECTOR
-# -----------------------------
+
+
+
 
 def run_generic_feature_on_frame(frame, feature: str, source_name: str, save_event: bool = True):
     """
@@ -4704,8 +4684,6 @@ def run_generic_feature_on_frame(frame, feature: str, source_name: str, save_eve
 
     saved = None
 
-    # Save one event record for an image/request. For continuous video/live
-    # detection, the caller controls how often records are saved.
     if boxes_out and save_event:
         saved = save_generic_record(
             event_type,
@@ -4771,7 +4749,6 @@ async def _generic_feature_video(
             last_annotated = annotated
             all_boxes.extend(boxes)
 
-            # Save only the first detected event in a video request.
             if saved is None and boxes:
                 event_type = feature
                 saved = save_generic_record(
@@ -4820,9 +4797,9 @@ async def pothole_video(
     return await _generic_feature_video(file, "pothole", sample_every)
 
 
-# -----------------------------
-# GARBAGE / POTHOLE WEBCAM
-# -----------------------------
+
+
+
 
 def _generic_feature_webcam(
     feature: str,
@@ -4902,10 +4879,9 @@ def pothole_webcam(
     return _generic_feature_webcam("pothole", camera_index, num_frames)
 
 
-# -----------------------------
-# WEBSOCKET ALIASES
-# -----------------------------
-# Helmet and traffic use their existing implementations.
+
+
+
 
 @app.websocket("/ws/multistream/{feature}/{filename}")
 async def ws_multistream_video(
@@ -5227,7 +5203,6 @@ async def ws_pothole_cctv(
     )
 
 
-# Image aliases for garbage and pothole already use the original handlers.
 @app.post("/api/garbage/image")
 async def garbage_image(file: UploadFile = File(...)):
     return await detect_garbage(file)
@@ -5238,9 +5213,9 @@ async def pothole_image(file: UploadFile = File(...)):
     return await detect_pothole(file)
 
 
-# ============================================================
-# START SERVER
-# ============================================================
+
+
+
 
 if __name__ == "__main__":
 

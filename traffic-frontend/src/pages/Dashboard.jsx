@@ -115,7 +115,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* MAIN STATS */}
+
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 
@@ -153,7 +153,7 @@ export default function Dashboard() {
 
       </div>
 
-      {/* VIOLATIONS */}
+
 
       <div className="rounded-xl border border-line bg-panel">
 

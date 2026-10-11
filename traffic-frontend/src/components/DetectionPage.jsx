@@ -50,9 +50,9 @@ export default function DetectionPage({
   const wsRef = useRef(null);
   const streamRef = useRef(null);
 
-  /* ---------------------------------
-     CLEANUP
-  --------------------------------- */
+
+
+
 
   useEffect(() => {
     return () => {
@@ -61,9 +61,9 @@ export default function DetectionPage({
     };
   }, []);
 
-  /* ---------------------------------
-     CHANGE MODE
-  --------------------------------- */
+
+
+
 
   const changeMode = (newMode) => {
     stopWebcam();
@@ -81,9 +81,9 @@ export default function DetectionPage({
     setRunning(false);
   };
 
-  /* ---------------------------------
-     FILE
-  --------------------------------- */
+
+
+
 
   const handleFile = (selectedFile) => {
     if (!selectedFile) return;
@@ -94,9 +94,9 @@ export default function DetectionPage({
     setError("");
   };
 
-    /* ---------------------------------
-      VIDEO
-    --------------------------------- */
+
+
+
 
   const runFileDetection = async () => {
     if (!file) return;
@@ -119,9 +119,9 @@ export default function DetectionPage({
     }
   };
 
-  /* ---------------------------------
-     WEBCAM
-  --------------------------------- */
+
+
+
 
   const startWebcam = async () => {
     try {
@@ -228,9 +228,9 @@ export default function DetectionPage({
     setCctvStatus("idle");
   };
 
-  /* ---------------------------------
-     CCTV
-  --------------------------------- */
+
+
+
 
   const connectCctv = () => {
     if (!rtspUrl.trim()) return;
@@ -304,9 +304,9 @@ export default function DetectionPage({
     setCctvStatus("done");
   };
 
-  /* ---------------------------------
-     RESULTS
-  --------------------------------- */
+
+
+
 
   const getDetectionCount = () => {
     if (!result) return 0;
@@ -325,7 +325,7 @@ export default function DetectionPage({
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
 
-      {/* HEADER */}
+
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-3">
           <span
@@ -352,7 +352,7 @@ export default function DetectionPage({
         </p>
       </div>
 
-      {/* MODE BUTTONS */}
+
       <div className="flex flex-wrap gap-2 mb-8">
 
         {MODES.map((item) => (
@@ -372,16 +372,16 @@ export default function DetectionPage({
 
       </div>
 
-      {/* ERROR */}
+
       {error && (
         <div className="mb-6 rounded-lg border border-alert/30 bg-alert/5 px-4 py-3 text-sm text-alert font-mono">
           {error}
         </div>
       )}
 
-      {/* =========================================
-          VIDEO
-      ========================================= */}
+
+
+
 
       {mode === "video" && (
         <div className="grid lg:grid-cols-2 gap-6">
@@ -434,9 +434,9 @@ export default function DetectionPage({
         </div>
       )}
 
-      {/* =========================================
-          WEBCAM
-      ========================================= */}
+
+
+
 
       {mode === "webcam" && (
         <div className="grid lg:grid-cols-2 gap-6">
@@ -500,9 +500,9 @@ export default function DetectionPage({
         </div>
       )}
 
-      {/* =========================================
-          CCTV
-      ========================================= */}
+
+
+
 
       {mode === "cctv" && (
         <div className="grid lg:grid-cols-2 gap-6">
@@ -587,9 +587,9 @@ export default function DetectionPage({
 }
 
 
-/* =========================================
-   RESULT PANEL
-========================================= */
+
+
+
 
 function ResultPanel({
   running,

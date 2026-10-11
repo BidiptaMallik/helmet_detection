@@ -97,9 +97,9 @@ export default function MultiStream() {
         )
       : [];
 
-  /* =========================================
-     UPDATE ONE CAMERA
-  ========================================= */
+
+
+
 
   const updateStream = (id, changes) => {
     setStreams((current) =>
@@ -114,9 +114,9 @@ export default function MultiStream() {
     );
   };
 
-  /* =========================================
-     CLOSE ALL STREAMS
-  ========================================= */
+
+
+
 
   const closeAllStreams = () => {
     Object.values(sockets.current).forEach((socket) => {
@@ -133,9 +133,9 @@ export default function MultiStream() {
     webcamRequests.current = {};
   };
 
-  /* =========================================
-     RESET
-  ========================================= */
+
+
+
 
   const resetStreams = () => {
     closeAllStreams();
@@ -145,9 +145,9 @@ export default function MultiStream() {
     );
   };
 
-  /* =========================================
-     CHANGE MODEL
-  ========================================= */
+
+
+
 
   const changeFeature = (nextFeature) => {
     closeAllStreams();
@@ -181,9 +181,9 @@ export default function MultiStream() {
     );
   };
 
-  /* =========================================
-     CLEANUP
-  ========================================= */
+
+
+
 
   useEffect(() => {
     return () => {
@@ -191,9 +191,9 @@ export default function MultiStream() {
     };
   }, []);
 
-  /* =========================================
-     SELECT VIDEO
-  ========================================= */
+
+
+
 
   const chooseFile = (id, file) => {
     updateStream(id, {
@@ -341,9 +341,9 @@ export default function MultiStream() {
     }
   };
 
-  /* =========================================
-     START STREAM
-  ========================================= */
+
+
+
 
   const startStream = async (id) => {
     const stream = streams.find(
@@ -379,7 +379,7 @@ export default function MultiStream() {
         congestion: "UPLOADING",
       });
 
-      /* Upload video */
+
 
       const response = await uploadVideo(
         stream.file
@@ -397,7 +397,7 @@ export default function MultiStream() {
         congestion: "CONNECTING",
       });
 
-      /* Create separate WebSocket */
+
 
       const ws = new WebSocket(
         getMultistreamWsUrl(
@@ -409,9 +409,9 @@ export default function MultiStream() {
 
       sockets.current[id] = ws;
 
-      /* =====================================
-         WEBSOCKET OPEN
-      ===================================== */
+
+
+
 
       ws.onopen = () => {
         updateStream(id, {
@@ -420,22 +420,22 @@ export default function MultiStream() {
         });
       };
 
-      /* =====================================
-         RECEIVE FRAME
-      ===================================== */
+
+
+
 
       ws.onmessage = (event) => {
         try {
           const message =
             JSON.parse(event.data);
 
-          /* FRAME */
+
 
           if (message.type === "frame") {
             applyFrameMessage(id, message);
           }
 
-          /* FINISHED */
+
 
           if (message.type === "done") {
             updateStream(id, {
@@ -444,7 +444,7 @@ export default function MultiStream() {
             });
           }
 
-          /* ERROR */
+
 
           if (message.type === "error") {
             updateStream(id, {
@@ -465,9 +465,9 @@ export default function MultiStream() {
         }
       };
 
-      /* =====================================
-         WEBSOCKET ERROR
-      ===================================== */
+
+
+
 
       ws.onerror = () => {
         updateStream(id, {
@@ -478,9 +478,9 @@ export default function MultiStream() {
         });
       };
 
-      /* =====================================
-         WEBSOCKET CLOSE
-      ===================================== */
+
+
+
 
       ws.onclose = () => {
         updateStream(id, {
@@ -506,9 +506,9 @@ export default function MultiStream() {
     }
   };
 
-  /* =========================================
-     STOP STREAM
-  ========================================= */
+
+
+
 
   const stopStream = (id) => {
     const socket =
@@ -533,12 +533,12 @@ export default function MultiStream() {
     });
   };
 
-  /* =========================================
-     DETECTION COUNT
-  ========================================= */
+
+
+
 
   const getDetectionCount = (stream) => {
-    /* Traffic */
+
 
     if (feature === "traffic") {
       return Object.values(
@@ -550,21 +550,21 @@ export default function MultiStream() {
       );
     }
 
-    /* Other models */
+
 
     return (
       stream.detections?.length || 0
     );
   };
 
-  /* =========================================
-     UI
-  ========================================= */
+
+
+
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
 
-      {/* HEADER */}
+
 
       <div className="mb-8">
 
@@ -601,7 +601,7 @@ export default function MultiStream() {
 
       </div>
 
-      {/* MODEL SELECTOR */}
+
 
       <div className="rounded-xl border border-line bg-panel p-5 mb-8">
 
@@ -645,7 +645,7 @@ export default function MultiStream() {
 
       </div>
 
-      {/* CURRENT MODEL */}
+
 
       <div className="flex items-center justify-between mb-4">
 
@@ -778,7 +778,7 @@ export default function MultiStream() {
         </section>
       )}
 
-      {/* CAMERA GRID */}
+
 
       <div className="grid md:grid-cols-2 gap-5">
 
@@ -789,7 +789,7 @@ export default function MultiStream() {
             className="rounded-xl border border-line bg-panel overflow-hidden"
           >
 
-            {/* CAMERA HEADER */}
+
 
             <div className="flex items-center justify-between px-4 py-3 border-b border-line">
 
@@ -848,7 +848,7 @@ export default function MultiStream() {
               ))}
             </div>
 
-            {/* VIDEO */}
+
 
             <div className="aspect-video bg-black flex items-center justify-center">
 
@@ -886,7 +886,7 @@ export default function MultiStream() {
 
             </div>
 
-            {/* CONTROLS */}
+
 
             <div className="p-4">
 
@@ -939,7 +939,7 @@ export default function MultiStream() {
                 </label>
               )}
 
-              {/* STATS */}
+
 
               <div className="grid grid-cols-2 gap-3 mt-4">
 
@@ -971,7 +971,7 @@ export default function MultiStream() {
 
               </div>
 
-              {/* TRAFFIC COUNTS */}
+
 
               {feature === "traffic" &&
                 Object.keys(
@@ -1007,7 +1007,7 @@ export default function MultiStream() {
 
                 )}
 
-              {/* ERROR */}
+
 
               {stream.error && (
 
@@ -1017,7 +1017,7 @@ export default function MultiStream() {
 
               )}
 
-              {/* BUTTON */}
+
 
               <div className="flex gap-2 mt-4">
 
@@ -1061,7 +1061,7 @@ export default function MultiStream() {
 
       </div>
 
-      {/* INFORMATION */}
+
 
       <div className="mt-6 rounded-xl border border-line bg-panel px-5 py-4">
 
