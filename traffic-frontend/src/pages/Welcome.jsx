@@ -45,15 +45,11 @@ export default function Welcome() {
 
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-line bg-panel font-mono text-[11px] text-scan mb-6">
         <span className="h-1.5 w-1.5 rounded-full bg-scan animate-blink" />
-        CITY DETECTION WORKSPACE
+        SMART CITY WORKSPACE
       </div>
 
       <h1 className="font-display text-5xl sm:text-6xl font-semibold tracking-tight mb-6 leading-[1.05]">
-        Street conditions,
-        <br />
-        <span className="text-safe">
-          in one place.
-        </span>
+        Smart City
       </h1>
 
       <p className="text-muted max-w-2xl mx-auto mb-14 text-base leading-relaxed">
